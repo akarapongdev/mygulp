@@ -1,3 +1,3 @@
-#Gulpfile
-version: 1.0.0 
-author: Akarapong Pudjai
+# Gulpfile
+[![NPM version][npm-image]][npm-url]
+Author: Akarapong Pudjai

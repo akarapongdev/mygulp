@@ -7,6 +7,7 @@ var sourcemaps  = require('gulp-sourcemaps');
 var uglify      = require('gulp-uglify');
 var jade        = require('gulp-jade');
 var livereload  = require('gulp-livereload');
+var plumber     = require('gulp-plumber');
 var tinylr      = require('tiny-lr');
 var express     = require('express');
 var app         = express();
@@ -17,6 +18,7 @@ var server      = tinylr();
 // Stylesheet Task
 gulp.task('css', function() {
   return gulp.src('./src/sass/**/*.sass')
+  .pipe(plumber())
   .pipe(sourcemaps.init())
   .pipe(sass({
     includPaths: ['./src/sass/'],
@@ -34,6 +36,7 @@ gulp.task('css', function() {
 // Script Task
 gulp.task('js', function() {
     return gulp.src('./src/js/*.js')
+    .pipe(plumber())
     .pipe(uglify())
     .pipe(gulp.dest('./dist/js/'))
     .pipe( livereload( server ));
@@ -42,9 +45,10 @@ gulp.task('js', function() {
 // HTML Template Task
 gulp.task('jade', function() {
   return gulp.src('./src/*.jade')
+  .pipe(plumber())
   .pipe(jade({
     pretty: true
-  }))  
+  }))
   .pipe(gulp.dest('./dist/'))
   .pipe( livereload( server ));
 });
@@ -62,7 +66,7 @@ gulp.task('watch', function () {
     if (err) { return console.log(err); }
     gulp.watch('src/sass/**/*.sass',['css']);
     gulp.watch('src/js/*.js',['js']);
-    gulp.watch('src/*.jade',['jade']);    
+    gulp.watch('src/*.jade',['jade']);
   });
 });
 
@@ -72,6 +76,7 @@ gulp.task('default', ['js','css','jade','express','watch']);
 // Production Task
 gulp.task('production', function() {
   return gulp.src('./dist/css/*.css')
+  .pipe(plumber())
   .pipe(csso())
   .pipe(gulp.dest('./dist/css'));
 });
